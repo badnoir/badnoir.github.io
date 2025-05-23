@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secret Sender</title>
+
+    <!-- Firebase + p5.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+
+    <style>
+      body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 0;
+        background: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        box-sizing: border-box;
+      }
+
+      input, button {
+        font-size: 1.2rem;
+        padding: 12px;
+        margin: 10px;
+        border-radius: 8px;
+        border: none;
+        width: 80%;
+        max-width: 400px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      }
+
+      button {
+        background-color: #ff8c00;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #c75d06;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyDKKF57NGNwJOHR7hOf41X4XrZSZNRqpaU",
+        authDomain: "secretboard-4c424.firebaseapp.com",
+        databaseURL: "https://secretboard-4c424-default-rtdb.firebaseio.com",
+        projectId: "secretboard-4c424",
+        storageBucket: "secretboard-4c424.appspot.com",
+        messagingSenderId: "809535389612",
+        appId: "1:809535389612:web:d014e728e8dc12455bc409"
+      };
+
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+
+      let input, button;
+
+      function setup() {
+        noCanvas();
+        input = createInput();
+        input.attribute('placeholder', 'Enter your secret...');
+        input.parent(document.body);
+        
+        button = createButton('Send Secret');
+        button.parent(document.body);
+        button.mousePressed(sendSecret);
+      }
+
+      function sendSecret() {
+        const secret = input.value();
+        if (secret.trim() !== "") {
+          database.ref("secret").push({ value: secret });
+          input.value('');
+        }
+      }
+    </script>
+  </body>
+</html>
